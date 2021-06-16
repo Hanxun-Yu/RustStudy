@@ -2,7 +2,9 @@ fn main() {
     println!("Hello, world!");
 
     // var();
-    type_();
+    // type_();
+    // another_function(3, 4);
+    _loop();
 }
 
 fn type_() {
@@ -35,8 +37,8 @@ fn type_() {
 
     //数组
     let array: [i32; 5] = [1, 2, 3, 4, 5]; //[<元素类型>;<元素个数>]
-    // let array = [3; 5]; // = [<值>;<元素个数>] 相当于 let array = [3,3,3,3,3]
-    println!("array[0]:{}",array[0])
+                                           // let array = [3; 5]; // = [<值>;<元素个数>] 相当于 let array = [3,3,3,3,3]
+    println!("array[0]:{}", array[0])
 }
 
 fn var() {
@@ -61,4 +63,84 @@ fn var() {
     //Shadowing 重复声明，可改变类型
     let spaces = "   ";
     let spaces = spaces.len();
+}
+
+//函数参数必须写明参数
+fn another_function(x: i32, y: i32) {
+    println!("the value of x is:{}", x);
+    println!("the value of y is:{}", y);
+
+    println!("five() result:{}", five());
+}
+
+fn five() -> i32 {
+    // 5 //可以就写一个5，用表达式方式返回5，注意表达式方式，不加分号
+    return 5; //也可以用return 关键字返回5
+}
+
+//表达式和语句
+fn expression_statement() {
+    let y = {
+        let x = 1;
+        x + 3 //表示现在整个{}闭包，是一个表达式，返回值是x+3，注意这里不能加分号;
+
+        // x+3; //如果这里加分号;,这就变成了一个语句，语句是没有返回值的
+    };
+
+    println!("the value of y is:{}", y);
+}
+
+fn process_control() {
+    let number = 5;
+
+    if number < 5 {
+        //
+    } else {
+        //
+    }
+
+    //match写法
+    // match number.cmp(5) {
+
+    // }
+
+    //if是一个表达式，所以可以赋值给let
+    let condition: bool = false;
+    let number = if condition { 5 } else { 6 }; //这里2个{}必须类型相同
+}
+
+fn _loop() {
+    loop {
+        //
+
+        break;
+    }
+
+    //loop 可以作为表达式
+    let mut counter = 0;
+    let result = loop {
+        counter += 1;
+        if counter == 10 {
+            break counter * 2; //使用break 返回值
+        }
+    };
+
+    println!("The result is:{}", result);
+
+    let mut index = 0;
+    while index < 5 {
+        break;
+    }
+
+    let a = [1, 2, 3, 4, 5];
+
+    for element in a.iter() {
+        println!("the element is :{}", element);
+    }
+
+    println!();
+    //(1..4) 表示1到4，不包括4， rev()翻转
+    for number in (1..4).rev() {
+        println!("the element is :{}", number);
+    }
 }
