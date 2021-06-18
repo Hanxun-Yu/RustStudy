@@ -17,6 +17,7 @@ fn main() {
     println!("s:{}, _s2:{}", s, _s2);
 
     test_send_arg_to_function();
+    test_slice();
 }
 
 fn test_send_arg_to_function() {
@@ -39,7 +40,6 @@ fn test_send_arg_to_function() {
     let mut s = String::from("Hello World!");
     let s_len = use_mutable_reference(&mut s);
     println!("\"{}\".len()={}", s, s_len);
-
 
     let num = 4;
     make_copy(num);
@@ -69,4 +69,53 @@ fn use_mutable_reference(str: &mut String) -> usize {
     //因为使用了mut修饰，所以引用str可被修改
     str.push_str("hahaha");
     str.len()
+}
+
+fn test_slice() {
+    //例子，一个需求场景，找到字符串中第一个单词
+    let mut str: String = String::from("Hello World!");
+    let wordIndex = first_word_no_slice(&str); //这里先返回第一个空格，然后再做切割
+    str.clear(); //这里意外改变的字符串，所以wordIndex会与str不匹配
+    println!("str:{} wordIndex:{}", str, wordIndex);
+
+    //以上做法有一个缺陷，当wordIndex得到结果后，如果str被以外改变，wordIndex将不正确，引起bug
+
+
+    let mut s: String = String::from("Hello World!");
+    let wordIndex = first_word_on_slice(&s);
+    // s.clear(); //这里意外改变的字符串，将会报错
+    println!("str:{} wordIndex:{}", s, wordIndex);
+
+
+}
+
+/**
+ *  use slice
+ * 
+ * @return &str 表示返回字符串切片
+ * 这里返回字符串切片，一定是传入的字符串，这样就是一个不可变的借用，外部将无法再改变传入的字符串
+ **/
+ fn first_word_on_slice(s: &String) -> &str { 
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[..i];
+        }
+    }
+    &s[..]
+}
+
+/**
+ *  no slice
+ **/
+fn first_word_no_slice(s: &String) -> usize {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return i;
+        }
+    }
+    s.len()
 }
